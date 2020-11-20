@@ -26,7 +26,12 @@
 *.a
 *.lib
 
+# Visual Studio Code options
+.vscode/*
+
 # Executables
 *.exe
 *.out
 *.app
+nfa_simulation
+
