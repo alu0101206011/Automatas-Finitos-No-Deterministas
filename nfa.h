@@ -1,9 +1,7 @@
-/// @struct Transitions
-///
-/// @brief a struct with what each node needs to make a transition
+
 struct Transition {
-  char character;  // what the state needs to transition
-  int state = -1;  // will transit to this state
+  char character;  
+  int state = -1;  
 };
 
 /// @struct Node
@@ -13,7 +11,7 @@ struct State {
   int state = -1;
   bool accepting;  // If is true is a accepting state of NFA
   bool initial;
-  std::vector<Transition> transitions;  // Different transitions available the state has
+  std::set<Transition> transitions;  // Different transitions available the state has
 };
 
 /// @class NFA
@@ -21,14 +19,21 @@ struct State {
 /// @brief Non-Deterministic Finite Automaton class
 class NFA {
   private:
+    std::set<char> Alphabet;
     std::vector<State> nfa_;
 
   public:
-    NFA(const std::string& file);
 
+    /// @brief Initialize all attributes using the following parameters
+    /// @param kFile
+    NFA(const std::string& kFile, int open_file);
 
+    
 
     void Write();
+
+    private:
+    std::ifstream& CreateNFA (std::ifstream& newNFA);
 
 };
 

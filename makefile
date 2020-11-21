@@ -1,6 +1,6 @@
 CC = g++
 CFLAGS = -g -Wall --std=c++17
-OBJ = ./main_nfa.o ./nfa.o
+OBJ = ./main_nfa.o ./nfa.o ./transition.o
 EXEC = nfa_simulation
 
 all: $(OBJ)
@@ -15,4 +15,4 @@ run: clean all
 .PHONY: clean
 
 clean:
-	bash -O extglob -c "rm -vf !(*.cc|*.h|"makefile"|infile.txt|README.md)"
+	bash -O extglob -c "rm -vf !(*.cc|*.h|"makefile"|infile.txt|README.md|*.nfa)"

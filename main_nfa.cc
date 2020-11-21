@@ -37,7 +37,14 @@ int main(int argc, char *argv[]) {
   if(reader.eof()) 
     ErrorMessage(4);
 
-  NFA nfa(argv[1]);
+  int open_file;
+  NFA nfa(argv[1], open_file);
+  if (open_file == 1) {
+    ErrorMessage(3);
+  } else if (open_file == 2) {
+    ErrorMessage(4);
+  }
+
   nfa.Write();
 
   
