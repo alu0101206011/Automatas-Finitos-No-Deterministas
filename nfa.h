@@ -1,26 +1,14 @@
-
-struct Transition {
-  char character;  
-  int state = -1;  
-};
-
-/// @struct Node
-///
-/// @brief struct what represents the states of NFA
-struct State {
-  int state = -1;
-  bool accepting;  // If is true is a accepting state of NFA
-  bool initial;
-  std::set<Transition> transitions;  // Different transitions available the state has
-};
-
 /// @class NFA
 ///
 /// @brief Non-Deterministic Finite Automaton class
+///
+/// @author Anabel Díaz Labrador <alu0101206011@ull.edu.es> 
+/// @date 20 Nov 2020
 class NFA {
   private:
     std::set<char> Alphabet;
-    std::vector<State> nfa_;
+    std::set<State> nfa_;
+
 
   public:
 

@@ -1,4 +1,3 @@
-  
 /// Universidad de La Laguna
 /// Escuela Superior de Ingeniería y Tecnología
 /// Grado en Ingeniería Informática
@@ -6,9 +5,9 @@
 ///
 /// @author Anabel Díaz Labrador <alu0101206011@ull.edu.es> 
 /// @date 10 Nov 2020
-/// @brief implementation of class Automata
+/// @brief implementation of class NFA
 /// 
-/// @see https://en.wikipedia.org/wiki/Automata_theory
+/// @see https://en.wikipedia.org/wiki/Nondeterministic_finite_automaton
 /// 
 /// To compile: make 
 /// To clean files: make clean

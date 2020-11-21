@@ -4,6 +4,7 @@
 #include <vector>
 #include <set>
 
+#include "state.h"
 #include "nfa.h"
 
 //
@@ -31,7 +32,7 @@ void NFA::Write() {
 }
 
 // 
-std::ifstream& NFA::CreateNFA (std::ifstream& reader_nfa) {
+std::ifstream& NFA::CreateNFA(std::ifstream& reader_nfa) {
   int total_states_number, initial_state;
   std::string line;
   bool initial = false;
@@ -59,7 +60,7 @@ std::ifstream& NFA::CreateNFA (std::ifstream& reader_nfa) {
     std::cerr << "The states can't be a negative number\n";
     exit(2);
   }
-  nfa_.resize(total_states_number);
+  //nfa_.resize(total_states_number);
   int position_nfa = 0, size_transitions = 0, count = 3;
   std::set<int> list_position;
   while (!reader_nfa.eof()) {
@@ -72,7 +73,7 @@ std::ifstream& NFA::CreateNFA (std::ifstream& reader_nfa) {
     }
     std::cout << line << "\n";
     ss << line;
-    ss >> position_nfa >> nfa_[position_nfa].accepting >> size_transitions;         // HACER ATRIBUTO CON TODOS LOS ATRIBUTOS
+    //ss >> position_nfa >> nfa_[position_nfa].accepting >> size_transitions;         // HACER ATRIBUTO CON TODOS LOS ATRIBUTOS
 /*     if (list_position.count(position_nfa)) {
       std::cerr << "The node on line " << count << " already exists\n";               NO ESTOY SEGURA DE QUE HAGA FALTA CON SETS
       exit(2);
