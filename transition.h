@@ -1,6 +1,6 @@
 /// @class Transitions
 ///
-/// @brief a class with what each node needs to make a transition
+/// @brief a class that saves all transitions in a state
 ///
 /// @author Anabel Díaz Labrador <alu0101206011@ull.edu.es> 
 /// @date 20 Nov 2020

@@ -5,33 +5,33 @@
 #include "transition.h"
 
 // Default constructor
-Transition:: Transition (void): symbol(), nextState(){}
+Transition:: Transition(void): symbol(), nextState(){}
     
-
-Transition::Transition (int nextState, char userSymbol): symbol(userSymbol), 
+// Constructor
+Transition::Transition(int nextState, char userSymbol): symbol(userSymbol), 
 nextState(nextState) {}
 
 // Default destructor   
-Transition::~Transition (void) {
+Transition::~Transition(void) {
   symbol = '0';
   nextState = -1;
 }
 
 // Copy constructor
-Transition::Transition (const Transition& kNewTransition) {
+Transition::Transition(const Transition& kNewTransition) {
   symbol = kNewTransition.symbol;
   nextState = kNewTransition.nextState;
 }
 
 // Overloading of operator =
-Transition& Transition:: operator= (const Transition& kOtherTransition) {
+Transition& Transition:: operator=(const Transition& kOtherTransition) {
   symbol = kOtherTransition.symbol;
   nextState = kOtherTransition.nextState;
   return *this;
 }
 
 // Overloading of operator ==       
-bool Transition:: operator== (const Transition& kOtherTransition) const {
+bool Transition:: operator==(const Transition& kOtherTransition) const {
   if (symbol == kOtherTransition.symbol) 
     if (nextState == kOtherTransition.nextState)
       return true;
@@ -39,7 +39,7 @@ bool Transition:: operator== (const Transition& kOtherTransition) const {
 }
 
 // Overloading of operator <    
-bool Transition:: operator< (const Transition& kOtherTransition) const {
+bool Transition:: operator<(const Transition& kOtherTransition) const {
   if ((symbol <= kOtherTransition.symbol)) 
     return true;
   return false;
