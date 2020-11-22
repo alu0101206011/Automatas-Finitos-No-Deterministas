@@ -9,12 +9,11 @@
 
 class NFA {
   private:
-    std::set<char> Alphabet;
+    std::set<char> alphabet_;
     std::set<State> nfa_;
-    
-
+    int initial_state_;
+    std::set<State> accepted_states_;
   public:
-
     /// @brief Initialize all attributes using the following parameters
     /// @param kFile
     NFA(const std::string& kFile, int open_file);
@@ -24,7 +23,7 @@ class NFA {
     void Write();
 
     private:
-    std::ifstream& CreateNFA (std::ifstream& newNFA);
+    std::ifstream& CreateNFA(std::ifstream& newNFA);
 
 };
 

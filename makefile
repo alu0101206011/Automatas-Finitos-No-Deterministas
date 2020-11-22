@@ -1,5 +1,5 @@
 CC = g++
-CFLAGS = -g -Wall --std=c++17
+CFLAGS = -g -Wall --std=c++11
 OBJ = ./main_nfa.o ./nfa.o ./transition.o ./state.o
 EXEC = nfa_simulation
 
