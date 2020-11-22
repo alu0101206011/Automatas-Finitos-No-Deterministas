@@ -52,7 +52,7 @@ class State {
     /// @brief Returns true if the symbol it has as a parameter is used to make a 
     /// transition
     /// @param symbol
-    bool symbolIsUsed(char symbol) const;
+    bool SymbolIsUsed(char symbol) const;
 
     /// @brief Overloading of operator =
     /// @param kOtherState

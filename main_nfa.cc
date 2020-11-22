@@ -46,7 +46,7 @@ int main(int argc, char *argv[]) {
 
   nfa.Write();
 
-  
+  std::cout << nfa.BelongToAlphabet("abbaabbbbbbbbb") << "\n";
 
  return 0;
 }

@@ -18,13 +18,21 @@ class NFA {
     /// @param kFile
     NFA(const std::string& kFile, int open_file);
 
-    
+    /// @brief Returns true if the string belongs to the alphabet
+    /// @param kAnalyzeWord    
+    bool BelongToAlphabet(const std::string& kAnalyzeWord);
 
+    /// @brief 
+    /// @param kAnalyzeWord
+    bool AnalyzeString(const std::string& kAnalyzeWord);
+
+    /// @brief Write the NFA 
     void Write();
 
     private:
+    /// @brief
+    /// @param newNFA
     std::ifstream& CreateNFA(std::ifstream& newNFA);
-
 };
 
 /*

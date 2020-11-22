@@ -73,7 +73,7 @@ int State::NumberOfTransitions(void) const {
 
 // Returns true if the symbol it has as a parameter is used to make a 
 // transition
-bool State::symbolIsUsed(char symbol) const {
+bool State::SymbolIsUsed(char symbol) const {
   for (Transition transition : transitions_)
     if (transition.symbol == symbol) 
       return true;

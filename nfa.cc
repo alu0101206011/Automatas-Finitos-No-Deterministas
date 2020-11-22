@@ -23,19 +23,26 @@ NFA::NFA(const std::string& kFile, int open_file) {
   }
 }
 
+bool NFA::BelongToAlphabet(const std::string& kAnalyzeWord) {
+  for (const char analyze_letter : kAnalyzeWord)
+    if (!alphabet_.count(analyze_letter))  // If count = 0, analyze_letter is not in the alphabet
+      return false;
+  return true;
+}
+
 // Method to write the NFA
 void NFA::Write() {
   for (State state : nfa_) {
     std::cout << "Nodos nfa: " << state << "\n";
     std::cout << "Sus next states usando simbolo 'a': \n";
     for (int state_int : state.GetNextState('a'))
-      std::cout << state_int << "\n";  
+      std::cout << state_int << "\n";
     if (state.NumberOfTransitions() == 0)
       std::cout << "{}\n";
   }
   for (State state : accepted_states_)
     std::cout << "Aceptados: " << state << "\n";
-  for (char state : alphabet_) 
+  for (char state : alphabet_)
     std::cout << "Alafabeto: " << state << "\n";
 }
 
@@ -119,3 +126,4 @@ std::ifstream& NFA::CreateNFA(std::ifstream& reader_nfa) {
   }
   return reader_nfa;
 }
+
