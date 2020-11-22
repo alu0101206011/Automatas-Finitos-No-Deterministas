@@ -1,6 +1,6 @@
 CC = g++
 CFLAGS = -g -Wall --std=c++17
-OBJ = ./main_nfa.o ./nfa.o ./transition.o
+OBJ = ./main_nfa.o ./nfa.o ./transition.o ./state.o
 EXEC = nfa_simulation
 
 all: $(OBJ)

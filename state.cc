@@ -84,6 +84,7 @@ bool State::symbolIsUsed(char symbol) const {
 State& State::operator=(const State& kOtherState) {
   state_name_ = kOtherState.state_name_;
   transitions_ = kOtherState.transitions_;
+  return *this;
 }
 
 // Overloading of operator ==

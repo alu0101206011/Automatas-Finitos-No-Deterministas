@@ -4,7 +4,6 @@
 #include <vector>
 #include <set>
 
-#include "state.h"
 #include "nfa.h"
 
 //

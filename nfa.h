@@ -4,11 +4,14 @@
 ///
 /// @author Anabel Díaz Labrador <alu0101206011@ull.edu.es> 
 /// @date 20 Nov 2020
+
+#include "state.h"
+
 class NFA {
   private:
     std::set<char> Alphabet;
     std::set<State> nfa_;
-
+    
 
   public:
 
