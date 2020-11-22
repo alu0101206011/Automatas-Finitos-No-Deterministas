@@ -25,9 +25,13 @@ NFA::NFA(const std::string& kFile, int open_file) {
 
 // Method to write the NFA
 void NFA::Write() {
-/*    for (Transition hola : nfa_[3].transitions)
-    std::cout << hola.character << "-" << hola.state << "->";
-  std::cout << "\n";  */
+  for (State state : nfa_)
+    std::cout << "Nodos nfa: " << state << "\n";
+  for (State state : accepted_states_)
+    std::cout << "Aceptados: " << state << "\n";
+  for (char state : alphabet_) 
+    std::cout << "Alafabeto: " << state << "\n";
+
 }
 
 // 
@@ -70,8 +74,9 @@ std::ifstream& NFA::CreateNFA(std::ifstream& reader_nfa) {
       exit(2);
     }
     ss << line; 
-    ss >> next_name_state  >> accept_state >> size_transitions;
-    if ((next_name_state  >= total_states_number) || (next_name_state  < 0)) {
+    ss >> read_state.state_name_  >> accept_state >> size_transitions;
+    if ((read_state.state_name_  >= total_states_number) || 
+        (read_state.state_name_  < 0)) {
       std::cerr << "The node on line " << count << " is not in the limits.\n";
       exit(2);
     }
@@ -80,7 +85,6 @@ std::ifstream& NFA::CreateNFA(std::ifstream& reader_nfa) {
                 << "boolean expresion.\n";
       exit(2);      
     }
-    std::cout << "Linea: " << count << " Tamaño: " << size_transitions << "\n";
     for (unsigned iterator = 0; iterator < size_transitions; iterator++) {
       if (ss.eof()) {
         std::cout << "Transitions do not correspond to the given number "
@@ -95,15 +99,15 @@ std::ifstream& NFA::CreateNFA(std::ifstream& reader_nfa) {
       }
       read_state.SetNextState(next_name_state, symbol);
       alphabet_.insert(symbol);
-      if(accept_state == 1)
-        accepted_states_.insert(read_state);
-      nfa_.insert(read_state); 
     }
     if (!ss.eof()) {
       std::cout << "Transitions do not correspond to the given number "
                 << "[Line " << count << " of de file]\n";
       exit(2);
     }
+    if(accept_state == 1)
+      accepted_states_.insert(read_state);
+    nfa_.insert(read_state); 
     ss.clear();
     ++count;
   }
