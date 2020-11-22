@@ -25,13 +25,18 @@ NFA::NFA(const std::string& kFile, int open_file) {
 
 // Method to write the NFA
 void NFA::Write() {
-  for (State state : nfa_)
+  for (State state : nfa_) {
     std::cout << "Nodos nfa: " << state << "\n";
+    std::cout << "Sus next states usando simbolo 'a': \n";
+    for (int state_int : state.GetNextState('a'))
+      std::cout << state_int << "\n";  
+    if (state.NumberOfTransitions() == 0)
+      std::cout << "{}\n";
+  }
   for (State state : accepted_states_)
     std::cout << "Aceptados: " << state << "\n";
   for (char state : alphabet_) 
     std::cout << "Alafabeto: " << state << "\n";
-
 }
 
 // 
@@ -109,6 +114,7 @@ std::ifstream& NFA::CreateNFA(std::ifstream& reader_nfa) {
       accepted_states_.insert(read_state);
     nfa_.insert(read_state); 
     ss.clear();
+    read_state.Clear();
     ++count;
   }
   return reader_nfa;
