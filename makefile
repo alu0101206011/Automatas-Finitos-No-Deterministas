@@ -15,4 +15,4 @@ run: clean all
 .PHONY: clean
 
 clean:
-	bash -O extglob -c "rm -vf !(*.cc|*.h|"makefile"|infile.txt|README.md|*.nfa)"
+	bash -O extglob -c "rm -vf !(*.cc|*.h|"makefile"|input.txt|README.md|*.nfa)"

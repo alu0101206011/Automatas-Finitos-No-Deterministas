@@ -1,6 +1,5 @@
 #include <iostream>
 #include <set>
-#include <vector>
 #include <fstream>
 
 #include "state.h"
@@ -34,7 +33,7 @@ void State::Clear(void) {
 std::set<int> State::GetNextState(char symbol) const {
   std::set<int> result;
   for (Transition transition : transitions_)
-    if (transition.symbol == symbol) 
+    if (transition.symbol == symbol)
       result.insert(transition.nextState);
   return result;
 }
@@ -45,7 +44,7 @@ std::set<int> State::GetEpsilonTransitions(void) {
   if (HasEpsilonTransitions()) {
     for (Transition transition : transitions_)
       if (transition.symbol == '~') 
-        result.insert(transition.nextState);  
+        result.insert(transition.nextState);
   } else {
     std::cerr << "This state has not epsilon transitions\n";
   }

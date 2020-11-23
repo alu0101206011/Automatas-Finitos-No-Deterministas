@@ -24,7 +24,7 @@ class State {
     /// @param kState
     State(const State& kState);
 
-    /// Default destructor
+    /// @brief Default destructor
     ~State (void);
 
     /// @brief remove all the values of the transition set 

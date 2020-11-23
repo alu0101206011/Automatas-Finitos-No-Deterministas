@@ -1,7 +1,6 @@
 #include <iostream> 
 #include <fstream>
 #include <sstream>
-#include <vector>
 #include <set>
 #include <string>
 
@@ -24,9 +23,10 @@ NFA::NFA(const std::string& kFile, int open_file) {
   }
 }
 
+// 
 State NFA::GetState(int identifier) const {
   State result_state;
-  for (State iterator : nfa_) {
+  for (State iterator : set_states_) {
     if (iterator.state_name_ == identifier) {
       result_state = iterator;
     }
@@ -34,6 +34,7 @@ State NFA::GetState(int identifier) const {
   return result_state;
 }
 
+// 
 bool NFA::BelongToAlphabet(const std::string& kAnalyzeWord) {
   for (const char analyze_letter : kAnalyzeWord)
     if (!alphabet_.count(analyze_letter))  // If count = 0, analyze_letter is not in the alphabet
@@ -41,20 +42,36 @@ bool NFA::BelongToAlphabet(const std::string& kAnalyzeWord) {
   return true;
 }
 
-// Method to write the NFA
-void NFA::Write() {
-  for (State state : nfa_) {
-    std::cout << "Nodos nfa: " << state << "\n";
-    std::cout << "Sus next states usando simbolo 'a': \n";
-    for (int state_int : state.GetNextState('a'))
-      std::cout << state_int << "\n";
-    if (state.NumberOfTransitions() == 0)
-      std::cout << "{}\n";
+// Write the result of the analyze string if kAnailyzeWord belong to the 
+// alphabet of the NFA
+void NFA::WriteResultSearch(std::ostream& os, const std::string& kAnalyzeWord) {
+  if (!BelongToAlphabet(kAnalyzeWord)) {
+    os << "Error\n";
+  } else if(AnalyzeString(kAnalyzeWord, initial_state_)) {
+    os << "Si\n";
+  } else {
+    os << "No\n";
   }
-  for (State state : accepted_states_)
-    std::cout << "Aceptados: " << state << "\n";
+}
+
+// Method to write the NFA
+void NFA::Write(std::ostream& os) {
   for (char state : alphabet_)
-    std::cout << "Alafabeto: " << state << "\n";
+    os << "Alafabeto: " << state << "\n";
+  os << "\n";
+  for (State state : accepted_states_)
+    os << "Aceptados: " << state << "\n";
+  for (State state : set_states_) {
+    os << "\nNodos nfa: " << state << "\n";
+    for (char alphabet_letters : alphabet_) 
+      for (int state_int : state.GetNextState(alphabet_letters)) {
+        os << "Sus next states usando simbolo '" 
+                  << alphabet_letters << "': \n";
+        os << state_int << "\n";
+      }
+    if (state.NumberOfTransitions() == 0)
+      os << "\n";
+  }
 }
 
 // 
@@ -64,11 +81,6 @@ std::ifstream& NFA::CreateNFA(std::ifstream& reader_nfa) {
   bool initial = false;
   std::stringstream ss;
   std::getline(reader_nfa, line);
-  if (line.size() != 1) {
-    std::cerr << "There can only be one number of total state. [Line 1 of "
-              << "the file]\n";
-    exit(2);
-  }
   total_states_number = stoi(line);
   if (total_states_number <= 0) {
     std::cerr << "The total number of states must be greater than zero. "
@@ -76,10 +88,6 @@ std::ifstream& NFA::CreateNFA(std::ifstream& reader_nfa) {
     exit(2);
   }
   std::getline(reader_nfa, line);
-  if ((line.size() != 1)) {
-    std::cerr << "There can only be one initial state. [Line 2 of the file]\n";
-    exit(2);
-  }
   initial_state_ = stoi(line);
   if ((initial_state_ < 0) || (initial_state_ > total_states_number)) {
     std::cerr << "The states can't across the limits\n";
@@ -131,7 +139,7 @@ std::ifstream& NFA::CreateNFA(std::ifstream& reader_nfa) {
     }
     if(accept_state == 1)
       accepted_states_.insert(read_state);
-    nfa_.insert(read_state); 
+    set_states_.insert(read_state); 
     ss.clear();
     read_state.Clear();
     ++count;
@@ -139,39 +147,34 @@ std::ifstream& NFA::CreateNFA(std::ifstream& reader_nfa) {
   return reader_nfa;
 }
 
-bool NFA::AnalyzeString(std::string& analyze_word, int current_id) {
-  if (analyze_word.size() == 0) {
-    std::cout << current_id << " Num de estados aceptados: " << accepted_states_.count(current_id) << "\n";
-    if (accepted_states_.count(current_id)) {
-      std::cout << "cadena vacia:" << analyze_word << "\n";
+bool 
+NFA::AnalyzeString(const std::string& analyze_word, int current_identifier) {
+  if (analyze_word.size() == 0)
+    if (accepted_states_.count(current_identifier))
       return true;
-    } 
-  }
-
+   if (GetState(current_identifier).HasEpsilonTransitions()) {
+    std::set<int> epsilon_transitions = GetState(current_identifier).
+                                        GetEpsilonTransitions();
+    for (int state : epsilon_transitions)
+      if (AnalyzeString(analyze_word, state))
+        return true;
+  } 
   if (analyze_word.size() > 1) {
     char symbol = analyze_word[0];
     std::string next_word = analyze_word.substr(1, analyze_word.size() - 1);
-    std::set<int> next_id = GetState(current_id).GetNextState(symbol);
-
-    if (next_id.empty()) {
+    std::set<int> next_id = GetState(current_identifier).GetNextState(symbol);
+    if (next_id.empty())
       return false;
-    } 
-
-    for (int iterator : next_id) {
-      std::cout << "symbol: " << symbol << " nodo: " << iterator <<  " cadena: " << next_word << "\n";
+    for (int iterator : next_id)
       if (AnalyzeString(next_word, iterator))
         return true;
-    }
-
   } else if (analyze_word.size() == 1) {
     char symbol = analyze_word[0];
     std::string empty_word = "";
-    std::set<int> next_id = GetState(current_id).GetNextState(symbol);
-    for (int iterator : next_id) {
-      std::cout << "symbol: " << symbol << " nodo: " << iterator <<  " cadena: " << empty_word << "\n";
+    std::set<int> next_id = GetState(current_identifier).GetNextState(symbol);
+    for (int iterator : next_id)
       if (AnalyzeString(empty_word, iterator))
         return true;
-    }
   }
   return false;
 }

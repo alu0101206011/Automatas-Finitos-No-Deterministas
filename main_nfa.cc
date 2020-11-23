@@ -4,7 +4,7 @@
 /// Computabilidad y algoritmia
 ///
 /// @author Anabel Díaz Labrador <alu0101206011@ull.edu.es> 
-/// @date 10 Nov 2020
+/// @date 23 Nov 2020
 /// @brief implementation of class NFA
 /// 
 /// @see https://en.wikipedia.org/wiki/Nondeterministic_finite_automaton
@@ -12,10 +12,10 @@
 /// To compile: make 
 /// To clean files: make clean
 
-#include <iostream> 
-#include <fstream>
+#include <iostream>
 #include <set>
-#include <vector>
+#include <vector> 
+#include <fstream>
 
 #include "nfa.h"
 
@@ -29,13 +29,6 @@ int main(int argc, char *argv[]) {
     } else {
       ErrorMessage(1);
     }
-
-  std::ifstream reader(argv[1]);
-  if (!reader) 
-    ErrorMessage(3);
-  if(reader.eof()) 
-    ErrorMessage(4);
-
   int open_file;
   NFA nfa(argv[1], open_file);
   if (open_file == 1) {
@@ -43,18 +36,27 @@ int main(int argc, char *argv[]) {
   } else if (open_file == 2) {
     ErrorMessage(4);
   }
-
-  nfa.Write();
-
-  std::cout << nfa.BelongToAlphabet("abbaabbbbbbbbb") << "\n";
-
-  std::string w = "ba";
-  if (nfa.AnalyzeString(w,0)) {
-    std::cout << "La cadena pertenece!\n";
-  } else {
-    std::cout << "La cadena no pertenece!\n";
+  std::ifstream reader(argv[2]);
+  if (!reader) 
+    ErrorMessage(3);
+  if(reader.eof()) 
+    ErrorMessage(4);
+  std::string analyze_words;
+  std::vector<std::string> vector_analyze_strings;
+  while (!reader.eof()) {
+    reader >> analyze_words;
+    vector_analyze_strings.push_back(analyze_words);
   }
-
+  reader.close();
+  std::ofstream writer(argv[3]);
+  if (!writer) 
+    ErrorMessage(3);
+  if(writer.eof()) 
+    ErrorMessage(4);
+  for (std::string analyze_words : vector_analyze_strings)
+    nfa.WriteResultSearch(writer, analyze_words);
+  nfa.Write(writer);
+  writer.close();
  return 0;
 }
 
@@ -99,7 +101,7 @@ void ErrorMessage(const int kError) {
               << "Write ./nfa_simulation --help for more info\n";
     exit(1);
   } else if (kError == 4) {
-    std::cerr << "Error input.nfa cannot be empty\n"
+    std::cerr << "Error: file cannot be empty\n"
               << "Write ./nfa_simulation --help for more info\n";
   }
 }
