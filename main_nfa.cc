@@ -48,6 +48,13 @@ int main(int argc, char *argv[]) {
 
   std::cout << nfa.BelongToAlphabet("abbaabbbbbbbbb") << "\n";
 
+  std::string w = "ba";
+  if (nfa.AnalyzeString(w,0)) {
+    std::cout << "La cadena pertenece!\n";
+  } else {
+    std::cout << "La cadena no pertenece!\n";
+  }
+
  return 0;
 }
 

@@ -18,13 +18,18 @@ class NFA {
     /// @param kFile
     NFA(const std::string& kFile, int open_file);
 
+    /// @brief Returns state given its ID number
+    /// @param identifier
+    State GetState(int identifier) const;
+
     /// @brief Returns true if the string belongs to the alphabet
     /// @param kAnalyzeWord    
     bool BelongToAlphabet(const std::string& kAnalyzeWord);
 
     /// @brief 
     /// @param kAnalyzeWord
-    bool AnalyzeString(const std::string& kAnalyzeWord);
+    /// @param current_id
+    bool AnalyzeString(std::string& kAnalyzeWord, int current_id);
 
     /// @brief Write the NFA 
     void Write();

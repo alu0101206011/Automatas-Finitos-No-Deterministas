@@ -3,6 +3,7 @@
 #include <sstream>
 #include <vector>
 #include <set>
+#include <string>
 
 #include "nfa.h"
 
@@ -21,6 +22,16 @@ NFA::NFA(const std::string& kFile, int open_file) {
   } else {
     open_file = 1;
   }
+}
+
+State NFA::GetState(int identifier) const {
+  State result_state;
+  for (State iterator : nfa_) {
+    if (iterator.state_name_ == identifier) {
+      result_state = iterator;
+    }
+  }
+  return result_state;
 }
 
 bool NFA::BelongToAlphabet(const std::string& kAnalyzeWord) {
@@ -112,6 +123,7 @@ std::ifstream& NFA::CreateNFA(std::ifstream& reader_nfa) {
       read_state.SetNextState(next_name_state, symbol);
       alphabet_.insert(symbol);
     }
+    ss >> line;
     if (!ss.eof()) {
       std::cout << "Transitions do not correspond to the given number "
                 << "[Line " << count << " of de file]\n";
@@ -127,3 +139,39 @@ std::ifstream& NFA::CreateNFA(std::ifstream& reader_nfa) {
   return reader_nfa;
 }
 
+bool NFA::AnalyzeString(std::string& analyze_word, int current_id) {
+  if (analyze_word.size() == 0) {
+    std::cout << current_id << " Num de estados aceptados: " << accepted_states_.count(current_id) << "\n";
+    if (accepted_states_.count(current_id)) {
+      std::cout << "cadena vacia:" << analyze_word << "\n";
+      return true;
+    } 
+  }
+
+  if (analyze_word.size() > 1) {
+    char symbol = analyze_word[0];
+    std::string next_word = analyze_word.substr(1, analyze_word.size() - 1);
+    std::set<int> next_id = GetState(current_id).GetNextState(symbol);
+
+    if (next_id.empty()) {
+      return false;
+    } 
+
+    for (int iterator : next_id) {
+      std::cout << "symbol: " << symbol << " nodo: " << iterator <<  " cadena: " << next_word << "\n";
+      if (AnalyzeString(next_word, iterator))
+        return true;
+    }
+
+  } else if (analyze_word.size() == 1) {
+    char symbol = analyze_word[0];
+    std::string empty_word = "";
+    std::set<int> next_id = GetState(current_id).GetNextState(symbol);
+    for (int iterator : next_id) {
+      std::cout << "symbol: " << symbol << " nodo: " << iterator <<  " cadena: " << empty_word << "\n";
+      if (AnalyzeString(empty_word, iterator))
+        return true;
+    }
+  }
+  return false;
+}
