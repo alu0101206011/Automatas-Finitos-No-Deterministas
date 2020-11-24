@@ -16,7 +16,7 @@ class NFA {
   public:
     /// @brief Initialize all attributes using the following parameters
     /// @param kFile
-    NFA(const std::string& kFile, int open_file);
+    NFA(const std::string& kFile, int& open_file);
 
     std::set<char> get_alphabet(void) const;
     std::set<State> get_set_states(void) const;
@@ -28,8 +28,9 @@ class NFA {
     void set_initial_state(const int kNewInitialState);
     void set_accepted_states(const std::set<char>& kNewAcceptedStates);
     
-    /// @brief Returns true if the string belongs to the alphabet
-    /// @param kAnalyzeWord    
+    /// @brief If the string belongs to the alphabet
+    /// @param kAnalyzeWord  
+    /// @return true if string belongs to the alphabet
     bool BelongToAlphabet(const std::string& kAnalyzeWord);
 
     /// @brief Write using ostream the result of the search of accepted strings
@@ -42,16 +43,22 @@ class NFA {
     void Write(std::ostream& os);
 
     private:
-    /// @brief
+    /// @brief Initializes the attributes of the NFA class given an input
+    /// stream source
     /// @param newNFA
+    /// @return reader to be able to close the string
     std::ifstream& CreateNFA(std::ifstream& newNFA);
 
-    /// @brief 
+    /// @brief Recursive method that returns true if the string is an accepted 
+    /// string
     /// @param kAnalyzeWord
     /// @param current_identifier
-    bool AnalyzeString(const std::string& kAnalyzeWord, int current_identifier);
+    /// @return If is an accepted string or not
+    bool AnalyzeString(const std::string& kAnalyzeWord, 
+                             int current_identifier);
 
     /// @brief Returns state given its ID number
     /// @param identifier
+    /// @return
     State GetState(int identifier) const;
 };

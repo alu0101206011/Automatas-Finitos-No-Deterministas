@@ -1,3 +1,14 @@
+/// Universidad de La Laguna
+/// Escuela Superior de Ingeniería y Tecnología
+/// Grado en Ingeniería Informática
+/// Computabilidad y algoritmia
+///
+/// @author Anabel Díaz Labrador <alu0101206011@ull.edu.es> 
+/// @date 23 Nov 2020
+/// @brief Non-Deterministic Finite Automaton class
+/// 
+/// @see https://en.wikipedia.org/wiki/Nondeterministic_finite_automaton
+
 #include <iostream> 
 #include <fstream>
 #include <sstream>
@@ -7,7 +18,7 @@
 #include "nfa.h"
 
 // Constructor
-NFA::NFA(const std::string& kFile, int open_file) {
+NFA::NFA(const std::string& kFile, int& open_file) {
   std::ifstream reader(kFile);
   if (reader) {
     if (!reader.eof()) {
@@ -23,7 +34,7 @@ NFA::NFA(const std::string& kFile, int open_file) {
   }
 }
 
-// 
+// Returns the State according to identifier 
 State NFA::GetState(int identifier) const {
   State result_state;
   for (State iterator : set_states_) {
@@ -34,7 +45,7 @@ State NFA::GetState(int identifier) const {
   return result_state;
 }
 
-// 
+// Returns true if all characters of the string belongs to the alphabet
 bool NFA::BelongToAlphabet(const std::string& kAnalyzeWord) {
   for (const char analyze_letter : kAnalyzeWord)
     if (!alphabet_.count(analyze_letter))  // If count = 0, analyze_letter is not in the alphabet
@@ -74,7 +85,8 @@ void NFA::Write(std::ostream& os) {
   }
 }
 
-// 
+// Method that initializes the attributes of the NFA class given an input 
+// stream source
 std::ifstream& NFA::CreateNFA(std::ifstream& reader_nfa) {
   int total_states_number;
   std::string line;
@@ -90,7 +102,7 @@ std::ifstream& NFA::CreateNFA(std::ifstream& reader_nfa) {
   std::getline(reader_nfa, line);
   initial_state_ = stoi(line);
   if ((initial_state_ < 0) || (initial_state_ > total_states_number)) {
-    std::cerr << "The states can't across the limits\n";
+    std::cerr << "The states can't cross the limits\n";
     exit(2);
   }
   int next_name_state = 0, size_transitions = 0, count = 3, accept_state = 0;
@@ -140,13 +152,14 @@ std::ifstream& NFA::CreateNFA(std::ifstream& reader_nfa) {
     if(accept_state == 1)
       accepted_states_.insert(read_state);
     set_states_.insert(read_state); 
-    ss.clear();
+    ss.clear();  // to clean buffer before it is used again
     read_state.Clear();
     ++count;
   }
   return reader_nfa;
 }
 
+// Recursive method that returns true if the string is an accepted string
 bool 
 NFA::AnalyzeString(const std::string& analyze_word, int current_identifier) {
   if (analyze_word.size() == 0)

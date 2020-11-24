@@ -31,14 +31,15 @@ class State {
     /// and sets the state_name_ back to its default value 
     void Clear(void);
 
-    /// @brief Returns the next state using the symbol given as parameter
     /// @param symbol
+    /// @return The next state using the symbol given as parameter
     std::set<int> GetNextState(char symbol) const;
 
-    /// @brief Returns all epsilon transitions
+    /// @brief 
+    /// @return set with all epsilon transitions of this state
     std::set<int> GetEpsilonTransitions(void);
 
-    /// @brief Returns true if transitions_ has epsilons transitions
+    /// @return True if transitions_ has epsilons transitions
     bool HasEpsilonTransitions(void);
 
     /// @brief Put a new state in transitions_
@@ -46,28 +47,33 @@ class State {
     /// @param symbol
     void SetNextState(int next_state_name, char symbol);
 
-    /// @brief Returns the total number of transitions
+    /// @brief Returns 
+    /// @return The total number of transitions
     int NumberOfTransitions(void) const;
 
-    /// @brief Returns true if the symbol it has as a parameter is used to make a 
-    /// transition
     /// @param symbol
+    /// @return True if the symbol it has as a parameter is used to make a 
+    /// transition
     bool SymbolIsUsed(char symbol) const;
 
     /// @brief Overloading of operator =
     /// @param kOtherState
+    /// @return
     State& operator=(const State& kOtherState);
 
     /// @brief Overloading of operator ==
     /// @param kOtherState
+    /// @return
     bool operator==(const State& kOtherState) const;
 
     /// @brief Overloading of operator <
     /// @param kOtherState
+    /// @return
     bool operator<(const State& kOtherState) const;
 
     /// @brief Friend function used to overload operator <<
     /// @param os
     /// @param kOtherState
+    /// @return
     friend std::ostream& operator<<(std::ostream& os, const State& kOtherState);
 };

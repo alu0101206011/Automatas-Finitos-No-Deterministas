@@ -1,3 +1,12 @@
+/// Universidad de La Laguna
+/// Escuela Superior de Ingeniería y Tecnología
+/// Grado en Ingeniería Informática
+/// Computabilidad y algoritmia
+///
+/// @author Anabel Díaz Labrador <alu0101206011@ull.edu.es> 
+/// @date 20 Nov 2020
+/// @brief Implementation of State class 
+
 #include <iostream>
 #include <set>
 #include <fstream>
@@ -46,7 +55,7 @@ std::set<int> State::GetEpsilonTransitions(void) {
       if (transition.symbol == '~') 
         result.insert(transition.nextState);
   } else {
-    std::cerr << "This state has not epsilon transitions\n";
+    std::cerr << "This state has no epsilon transitions\n";
   }
   return result;
 }

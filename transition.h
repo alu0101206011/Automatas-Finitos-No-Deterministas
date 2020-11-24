@@ -26,14 +26,19 @@ class Transition {
     ~Transition(void);
 
     /// @brief Overloading of operator =
-    /// @param kOtherTransition    
+    /// @param kOtherTransition
+    /// @return the class object itself
     Transition& operator=(const Transition& kOtherTransition);
 
     /// @brief Overloading of operator ==
-    /// @param kOtherTransition  
+    /// @param kOtherTransition
+    /// @return the result of the comparation of symbol and
+    /// kOtherTransition.symbol
     bool operator==(const Transition& kOtherTransition) const;
 
     /// @brief Overloading of operator <
-    /// @param kOtherTransition  
+    /// @param kOtherTransition
+    /// @return the result of the comparation of symbol and
+    /// kOtherTransition.symbol
     bool operator<(const Transition& kOtherTransition) const;
 };

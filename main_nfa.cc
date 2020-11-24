@@ -5,16 +5,18 @@
 ///
 /// @author Anabel Díaz Labrador <alu0101206011@ull.edu.es> 
 /// @date 23 Nov 2020
-/// @brief implementation of class NFA
+/// @brief this program creates an NFA and it is used to compare strings to know
+/// if they are accepted strings or not. The result of this comparation are then 
+/// send to an output file
 /// 
 /// @see https://en.wikipedia.org/wiki/Nondeterministic_finite_automaton
 /// 
-/// To compile: make 
+/// To compile: make
 /// To clean files: make clean
 
 #include <iostream>
 #include <set>
-#include <vector> 
+#include <vector>
 #include <fstream>
 
 #include "nfa.h"
@@ -23,23 +25,26 @@ void ErrorMessage(const int);
 
 int main(int argc, char *argv[]) {
   if (argc != 4 && argc != 2) { ErrorMessage(1); }
-  if ((std::string)argv[1] == "--help" || (std::string)argv[1] == "-h")
+  if ((std::string)argv[1] == "--help" || (std::string)argv[1] == "-h") {
     if (argc == 2) {
       ErrorMessage(2);
     } else {
       ErrorMessage(1);
     }
+  }
   int open_file;
-  NFA nfa(argv[1], open_file);
+  const std::string kInputNFA = argv[1];
+  NFA nfa(kInputNFA, open_file);
   if (open_file == 1) {
     ErrorMessage(3);
   } else if (open_file == 2) {
     ErrorMessage(4);
   }
-  std::ifstream reader(argv[2]);
-  if (!reader) 
+  const std::string kInputString = argv[2];
+  std::ifstream reader(kInputString);
+  if (!reader)
     ErrorMessage(3);
-  if(reader.eof()) 
+  if(reader.eof())
     ErrorMessage(4);
   std::string analyze_words;
   std::vector<std::string> vector_analyze_strings;
@@ -48,14 +53,14 @@ int main(int argc, char *argv[]) {
     vector_analyze_strings.push_back(analyze_words);
   }
   reader.close();
-  std::ofstream writer(argv[3]);
-  if (!writer) 
+  const std::string kOutputFile = argv[3];
+  std::ofstream writer(kOutputFile);
+  if (!writer)
     ErrorMessage(3);
-  if(writer.eof()) 
+  if(writer.eof())
     ErrorMessage(4);
   for (std::string analyze_words : vector_analyze_strings)
     nfa.WriteResultSearch(writer, analyze_words);
-  nfa.Write(writer);
   writer.close();
  return 0;
 }
@@ -63,7 +68,7 @@ int main(int argc, char *argv[]) {
 // Show error messages in terminal
 void ErrorMessage(const int kError) {
   if (kError == 1) {
-    std::cerr << "Invalid arguments to function.\n" 
+    std::cerr << "Invalid arguments to function.\n"
               << "Write ./nfa_simulation --help for more info\n";
     exit(1);
   } else if (kError == 2) {
@@ -97,7 +102,7 @@ void ErrorMessage(const int kError) {
               << "\t-h,--help\t\tShow this help message\n";
     exit(1);
   } else if (kError == 3) {
-    std::cerr << "Error: file could not be opened\n" 
+    std::cerr << "Error: file could not be opened\n"
               << "Write ./nfa_simulation --help for more info\n";
     exit(1);
   } else if (kError == 4) {
