@@ -3,20 +3,20 @@
 /// Grado en Ingeniería Informática
 /// Computabilidad y algoritmia
 ///
-/// @author Anabel Díaz Labrador <alu0101206011@ull.edu.es> 
+/// @author Anabel Díaz Labrador <alu0101206011@ull.edu.es>
 /// @date 20 Nov 2020
-/// @brief Implementation of transition class 
+/// @brief Implementation of transition class
 
 #include "transition.h"
 
 // Default constructor
-Transition:: Transition(void): symbol(), nextState() {}
-    
+Transition::Transition(void) : symbol(), nextState() {}
+
 // Constructor
 Transition::Transition(int nextState, char userSymbol)
     : symbol(userSymbol), nextState(nextState) {}
 
-// Default destructor   
+// Default destructor
 Transition::~Transition(void) {
   symbol = '0';
   nextState = -1;
@@ -35,15 +35,15 @@ Transition& Transition::operator=(const Transition& kOtherTransition) {
   return *this;
 }
 
-// Overloading of operator ==       
+// Overloading of operator ==
 bool Transition::operator==(const Transition& kOtherTransition) const {
-  if (symbol == kOtherTransition.symbol) 
-    if (nextState == kOtherTransition.nextState)
+  if (symbol == kOtherTransition.symbol)
+    if (nextState == kOtherTransition.nextState) 
       return true;
   return false;
 }
 
-// Overloading of operator <    
+// Overloading of operator <
 bool Transition::operator<(const Transition& kOtherTransition) const {
   if ((symbol <= kOtherTransition.symbol)) 
     return true;

@@ -3,14 +3,14 @@
 /// Grado en Ingeniería Informática
 /// Computabilidad y algoritmia
 ///
-/// @author Anabel Díaz Labrador <alu0101206011@ull.edu.es> 
+/// @author Anabel Díaz Labrador <alu0101206011@ull.edu.es>
 /// @date 23 Nov 2020
 /// @brief this program creates an NFA and it is used to compare strings to know
-/// if they are accepted strings or not. The result of this comparation are then 
+/// if they are accepted strings or not. The result of this comparation are then
 /// send to an output file
-/// 
+///
 /// @see https://en.wikipedia.org/wiki/Nondeterministic_finite_automaton
-/// 
+///
 /// To compile: make
 /// To clean files: make clean
 
@@ -24,7 +24,9 @@
 void ErrorMessage(const int);
 
 int main(int argc, char *argv[]) {
-  if (argc != 4 && argc != 2) { ErrorMessage(1); }
+  if (argc != 4 && argc != 2) {
+    ErrorMessage(1);
+  }
   if ((std::string)argv[1] == "--help" || (std::string)argv[1] == "-h") {
     if (argc == 2) {
       ErrorMessage(2);
@@ -42,10 +44,11 @@ int main(int argc, char *argv[]) {
   }
   const std::string kInputString = argv[2];
   std::ifstream reader(kInputString);
-  if (!reader)
+  if (!reader) {
     ErrorMessage(3);
-  if(reader.eof())
+  } else if (reader.eof()) {
     ErrorMessage(4);
+  }
   std::string analyze_words;
   std::vector<std::string> vector_analyze_strings;
   while (!reader.eof()) {
@@ -55,14 +58,15 @@ int main(int argc, char *argv[]) {
   reader.close();
   const std::string kOutputFile = argv[3];
   std::ofstream writer(kOutputFile);
-  if (!writer)
+  if (!writer) {
     ErrorMessage(3);
-  if(writer.eof())
+  } else if (writer.eof()) {
     ErrorMessage(4);
+  }
   for (std::string analyze_words : vector_analyze_strings)
     nfa.WriteResultSearch(writer, analyze_words);
   writer.close();
- return 0;
+  return 0;
 }
 
 // Show error messages in terminal
@@ -98,7 +102,7 @@ void ErrorMessage(const int kError) {
               << "\noutput.txt Have to write the same strings from the input "
               << "file followed by a text -- Si / No indicative of the "
               << "acceptance \n(or not) of the string in question.\n"
-              << "\nFor OPTION:\n" 
+              << "\nFor OPTION:\n"
               << "\t-h,--help\t\tShow this help message\n";
     exit(1);
   } else if (kError == 3) {
