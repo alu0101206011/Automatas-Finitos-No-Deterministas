@@ -9,10 +9,10 @@
 #include "transition.h"
 
 class State {
- public:
-  int state_name_;  // state identification
+ private:
+  int state_name_;                    // state identification
   std::set<Transition> transitions_;  // Set of Transition class
-
+ public:
   /// @brief Default constructor
   State(void);
 
@@ -27,6 +27,14 @@ class State {
   /// @brief Default destructor
   ~State(void);
 
+  int get_state_name(void) const;
+  std::set<Transition> get_transitions(void) const;
+
+  void set_state_name(const int kNewStateName);
+  void set_state_name(const int kNewStateName, const int kUpperRange,
+                      const int kNumLine);
+  void set_transitions(const std::set<Transition>& NewTransitions);
+
   /// @brief remove all the values of the transition set
   /// and sets the state_name_ back to its default value
   void Clear(void);
@@ -37,7 +45,7 @@ class State {
 
   /// @brief Method to get epsilon transitions of the state
   /// @return set with all epsilon transitions of this state
-  std::set<int> GetEpsilonTransitions(void);
+  std::set<int> GetEpsilonClosure(void);
 
   /// @brief Check if the current state has epsilon transitions
   /// @return True if transitions_ has epsilons transitions

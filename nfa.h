@@ -13,7 +13,7 @@ class NFA {
   std::set<State> set_states_;  // Set of states of NFA
   int initial_state_;  // The start state
   std::set<State> accepted_states_;  // Only the accepted states are here
-  std::set<int> epsilon_closure_;  // To saves epsilon positions
+  std::set<int> epsilon_path_;  // Epsilon transition in a certain string size
  public:
   /// @brief Initialize all attributes using the following parameters
   /// @param kFile
@@ -27,6 +27,8 @@ class NFA {
   void set_alphabet(const std::set<char>& kNewAlphabet);
   void set_set_states(const std::set<State>& kNewStates);
   void set_initial_state(const int kNewInitialState);
+  void set_initial_state(const std::string& kInitialStateString,
+                         const int kUpperRange);
   void set_accepted_states(const std::set<State>& kNewAcceptedStates);
 
   /// @brief If the string belongs to the alphabet
@@ -50,6 +52,12 @@ class NFA {
   /// @return reader to be able to close the string
   std::ifstream& CreateNFA(std::ifstream& newNFA);
 
+  /// @brief Verify if the accepted state is in the limits (method to use with 
+  /// files)
+  /// @param kAcceptedState 
+  /// @param kNumLine Line in file
+  void accepted_state_into_limits(const int kAcceptedState, const int kNumLine);
+
   /// @brief Recursive method that returns true if the string is an accepted
   /// string
   /// @param kAnalyzeWord
@@ -62,8 +70,10 @@ class NFA {
   /// @return
   State GetState(int identifier) const;
 
-  /// @brief Returns state given its ID number
+  /// @brief Stores all epsilon transitions that have not been yet added to
+  /// a set of visited transitions
   /// @param state
-  /// @return
-  bool EpsilonClosure(int state);
+  /// @return If the state has already been visited, the method returns false,
+  /// otherwise the state is added to the set and it returns true
+  bool EpsilonPath(int state);
 };

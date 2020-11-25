@@ -31,6 +31,28 @@ State::~State(void) {
   transitions_.clear();
 }
 
+int State::get_state_name(void) const {
+  return state_name_;
+}
+std::set<Transition> State::get_transitions(void) const {
+  return transitions_;
+}
+
+void State::set_state_name(const int kNewStateName) {
+  state_name_ = kNewStateName;
+}
+void State::set_state_name(const int kNewStateName, const int kUpperRange, const int kNumLine) {
+  if ((kNewStateName >= kUpperRange) ||
+      (kNewStateName < 0)) {
+    std::cerr << "The node on line " << kNumLine << " is not in the limits.\n";
+    exit(2);
+  }
+  state_name_ = kNewStateName;
+}
+void State::set_transitions(const std::set<Transition>& NewTransitions) {
+  transitions_ = NewTransitions;
+}
+
 // Remove all the values of the transition set and sets the state_name_ 
 // back to its default value
 void State::Clear(void) {
@@ -48,7 +70,7 @@ std::set<int> State::GetNextState(char symbol) const {
 }
 
 // Returns all epsilon transitions
-std::set<int> State::GetEpsilonTransitions(void) {
+std::set<int> State::GetEpsilonClosure(void) {
   std::set<int> result;
   if (HasEpsilonTransitions()) {
     for (Transition transition : transitions_)

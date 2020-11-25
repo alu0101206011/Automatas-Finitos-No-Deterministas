@@ -23,7 +23,6 @@ NFA::NFA(const std::string &kFile, int &open_file) {
   if (reader) {
     if (!reader.eof()) {
       CreateNFA(reader);
-      alphabet_.insert('~');
       open_file = 0;
       reader.close();
     } else {
@@ -57,6 +56,13 @@ void NFA::set_set_states(const std::set<State> &kNewStates) {
 void NFA::set_initial_state(const int kNewInitialState) {
   initial_state_ = kNewInitialState;
 }
+void NFA::set_initial_state(const std::string &kInitialStateString, const int kUpperRange) {
+  initial_state_ = stoi(kInitialStateString);
+  if ((initial_state_ < 0) || (initial_state_ > kUpperRange)) {
+    std::cerr << "The states can't cross the limits\n";
+    exit(2);
+  }
+}
 void NFA::set_accepted_states(const std::set<State> &kNewAcceptedStates) {
   accepted_states_ = kNewAcceptedStates;
 }
@@ -65,7 +71,7 @@ void NFA::set_accepted_states(const std::set<State> &kNewAcceptedStates) {
 State NFA::GetState(int identifier) const {
   State result_state;
   for (State iterator : set_states_)
-    if (iterator.state_name_ == identifier)
+    if (iterator.get_state_name() == identifier)
       result_state = iterator;
   return result_state;
 }
@@ -73,7 +79,7 @@ State NFA::GetState(int identifier) const {
 // Returns true if all characters of the string belongs to the alphabet
 bool NFA::BelongToAlphabet(const std::string &kAnalyzeWord) {
   for (const char analyze_letter : kAnalyzeWord)
-    if (!alphabet_.count(analyze_letter))
+    if (!alphabet_.count(analyze_letter) && analyze_letter != '~')
       return false;
   return true;
 }
@@ -82,11 +88,11 @@ bool NFA::BelongToAlphabet(const std::string &kAnalyzeWord) {
 // alphabet of the NFA
 void NFA::WriteResultSearch(std::ostream &os, const std::string &kAnalyzeWord) {
   if (!BelongToAlphabet(kAnalyzeWord)) {
-    os << "Error\n";
+    os << "No\n";
     return;
-  } 
+  }
   bool accepted = false;
-  epsilon_closure_.clear();
+  epsilon_path_.clear();
   if (kAnalyzeWord == "~") {
     accepted = AnalyzeString("", initial_state_);
   } else {
@@ -121,7 +127,7 @@ void NFA::Write(std::ostream &os) {
 // Method that initializes the attributes of the NFA class given an input
 // stream source
 std::ifstream &NFA::CreateNFA(std::ifstream &reader_nfa) {
-  int total_states_number;
+  int total_states_number, state;
   std::string line;
   std::stringstream ss;
   std::getline(reader_nfa, line);
@@ -132,11 +138,7 @@ std::ifstream &NFA::CreateNFA(std::ifstream &reader_nfa) {
     exit(2);
   }
   std::getline(reader_nfa, line);
-  initial_state_ = stoi(line);
-  if ((initial_state_ < 0) || (initial_state_ > total_states_number)) {
-    std::cerr << "The states can't cross the limits\n";
-    exit(2);
-  }
+  set_initial_state(line, total_states_number);
   int next_name_state = 0, size_transitions = 0, count = 3, accept_state = 0;
   char symbol;
   State read_state;
@@ -149,23 +151,16 @@ std::ifstream &NFA::CreateNFA(std::ifstream &reader_nfa) {
       exit(2);
     }
     ss << line;
-    ss >> read_state.state_name_ >> accept_state >> size_transitions;
-    if ((read_state.state_name_ >= total_states_number) ||
-        (read_state.state_name_ < 0)) {
-      std::cerr << "The node on line " << count << " is not in the limits.\n";
-      exit(2);
-    }
-    if (accept_state != 0 && accept_state != 1) {
-      std::cerr << "The accept state on line " << count << " must be a "
-                << "boolean expresion.\n";
-      exit(2);
-    }
+    ss >> state >> accept_state >> size_transitions;
+    read_state.set_state_name(state, total_states_number, count);
+    accepted_state_into_limits(accept_state, count);
     for (unsigned iterator = 0; iterator < size_transitions; iterator++) {
       if (ss.eof()) {
         std::cout << "Transitions do not correspond to the given number "
                   << "[Line " << count << " of de file]\n";
         exit(2);
       }
+      
       ss >> symbol >> next_name_state;
       if (total_states_number <= next_name_state || next_name_state < 0) {
         std::cout << "State number out of range [Line " << count
@@ -191,26 +186,29 @@ std::ifstream &NFA::CreateNFA(std::ifstream &reader_nfa) {
   return reader_nfa;
 }
 
+// Verify if the accepted state is in the limits
+void NFA::accepted_state_into_limits(const int kAcceptedState, const int kNumLine) {
+  if (kAcceptedState != 0 && kAcceptedState != 1) {
+    std::cerr << "The accept state on line " << kNumLine << " must be a "
+              << "boolean expresion.\n";
+    exit(2);
+  }
+}
+
 // Recursive method that returns true if the string is an accepted string
 bool NFA::AnalyzeString(const std::string &analyze_word,
                         int current_identifier) {
   if (analyze_word.size() == 0)
-    if (accepted_states_.count(current_identifier)) {
-      std::cout << "aceptada :D\n";
+    if (accepted_states_.count(current_identifier)) 
       return true;
-    }
   if (GetState(current_identifier).HasEpsilonTransitions()) {
     std::set<int> epsilon_transitions =
-        GetState(current_identifier).GetEpsilonTransitions();
-  if (!EpsilonClosure(current_identifier)) {
-    std::cout << "REPETIDO\n";
-    return false;
-  }
-    for (int state : epsilon_transitions) {
-      std::cout << "symbol: ~ " <<  " cadena: " << analyze_word  << " NodeE: " << state << "\n";
+        GetState(current_identifier).GetEpsilonClosure();
+    if (EpsilonPath(current_identifier))
+      return false;
+    for (int state : epsilon_transitions)
       if (AnalyzeString(analyze_word, state)) 
         return true;
-    }
   }
   if (analyze_word.size() > 1) {
     char symbol = analyze_word[0];
@@ -219,8 +217,7 @@ bool NFA::AnalyzeString(const std::string &analyze_word,
     if (next_id.empty())  // There are not next transitions
       return false;
     for (int state : next_id) {
-      std::cout << "symbol: " << symbol <<  " cadena: " << analyze_word << " Node+1: " << state << "\n";
-      epsilon_closure_.clear();
+      epsilon_path_.clear();
       if (AnalyzeString(next_word, state)) 
         return true;
     }
@@ -229,8 +226,7 @@ bool NFA::AnalyzeString(const std::string &analyze_word,
     std::string empty_word = "";
     std::set<int> next_id = GetState(current_identifier).GetNextState(symbol);
     for (int state : next_id) {
-      std::cout << "symbol: " << symbol <<  " cadena: " << "~" << " Node1: " << state << "\n";
-      epsilon_closure_.clear();
+      epsilon_path_.clear();
       if (AnalyzeString(empty_word, state)) 
         return true;
     }
@@ -238,12 +234,15 @@ bool NFA::AnalyzeString(const std::string &analyze_word,
   return false;
 }
 
-bool NFA::EpsilonClosure(int state) {  // Tiene que saber si la cadena ha cambiado de tamaño
-  if (!epsilon_closure_.count(state)) {
-    epsilon_closure_.insert(state);
-    return true;
-  } else {
+
+// Method that keeps track of which states have been visited through epsilon 
+// transitions.
+bool NFA::EpsilonPath(int state) {
+  if (!epsilon_path_.count(state)) {
+    epsilon_path_.insert(state);
     return false;
+  } else {
+    return true;
   }
 }
 
