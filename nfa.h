@@ -13,6 +13,7 @@ class NFA {
   std::set<State> set_states_;  // Set of states of NFA
   int initial_state_;  // The start state
   std::set<State> accepted_states_;  // Only the accepted states are here
+  std::set<int> epsilon_closure_;  // To saves epsilon positions
  public:
   /// @brief Initialize all attributes using the following parameters
   /// @param kFile
@@ -60,4 +61,9 @@ class NFA {
   /// @param identifier
   /// @return
   State GetState(int identifier) const;
+
+  /// @brief Returns state given its ID number
+  /// @param state
+  /// @return
+  bool EpsilonClosure(int state);
 };
