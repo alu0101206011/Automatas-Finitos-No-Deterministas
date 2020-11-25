@@ -10,7 +10,7 @@
 
 class State {
  private:
-  int state_name_;                    // state identification
+  int state_name_;  // state identification
   std::set<Transition> transitions_;  // Set of Transition class
  public:
   /// @brief Default constructor
@@ -60,7 +60,7 @@ class State {
   /// @return The total number of transitions
   int NumberOfTransitions(void) const;
 
-  /// @
+  /// @brief Method to know if this symbol is used to make a transition
   /// @param symbol
   /// @return True if the symbol it has as a parameter is used to make a
   /// transition
@@ -68,22 +68,18 @@ class State {
 
   /// @brief Overloading of operator =
   /// @param kOtherState
-  /// @return
   State& operator=(const State& kOtherState);
 
   /// @brief Overloading of operator ==
   /// @param kOtherState
-  /// @return
   bool operator==(const State& kOtherState) const;
 
   /// @brief Overloading of operator <
   /// @param kOtherState
-  /// @return
   bool operator<(const State& kOtherState) const;
 
   /// @brief Friend function used to overload operator <<
   /// @param os
   /// @param kOtherState
-  /// @return
   friend std::ostream& operator<<(std::ostream& os, const State& kOtherState);
 };

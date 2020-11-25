@@ -4,7 +4,7 @@
 /// Computabilidad y algoritmia
 ///
 /// @author Anabel Díaz Labrador <alu0101206011@ull.edu.es>
-/// @date 23 Nov 2020
+/// @date 24 Nov 2020
 /// @brief Non-Deterministic Finite Automaton class
 ///
 /// @see https://en.wikipedia.org/wiki/Nondeterministic_finite_automaton
@@ -17,7 +17,7 @@
 
 #include "nfa.h"
 
-// Constructor
+// Constructor of the NFA class
 NFA::NFA(const std::string &kFile, int &open_file) {
   std::ifstream reader(kFile);
   if (reader) {
@@ -187,7 +187,8 @@ std::ifstream &NFA::CreateNFA(std::ifstream &reader_nfa) {
 }
 
 // Verify if the accepted state is in the limits
-void NFA::accepted_state_into_limits(const int kAcceptedState, const int kNumLine) {
+void NFA::accepted_state_into_limits(const int kAcceptedState,
+                                     const int kNumLine) {
   if (kAcceptedState != 0 && kAcceptedState != 1) {
     std::cerr << "The accept state on line " << kNumLine << " must be a "
               << "boolean expresion.\n";
@@ -233,7 +234,6 @@ bool NFA::AnalyzeString(const std::string &analyze_word,
   }
   return false;
 }
-
 
 // Method that keeps track of which states have been visited through epsilon 
 // transitions.

@@ -7,7 +7,7 @@
 
 class Transition {
  public:
-  char symbol;    // what the state needs to transition
+  char symbol;  // what the state needs to transition
   int nextState;  // will transit to this state
 
   /// @brief Initialize all attributes using the following parameters
