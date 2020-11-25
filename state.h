@@ -1,7 +1,7 @@
 /// @class State
 ///
-/// @brief This class works with states and attributes
-/// behavior.
+/// @brief It houses the attributes referring to the states of a class NFA and
+/// the methods to be developed for its correct operation.
 ///
 /// @author Anabel Díaz Labrador <alu0101206011@ull.edu.es>
 /// @date 20 Nov 2020

@@ -5,7 +5,7 @@
 ///
 /// @author Anabel Díaz Labrador <alu0101206011@ull.edu.es>
 /// @date 23 Nov 2020
-/// @brief this program creates an NFA and it is used to compare strings to know
+/// @brief This program creates an NFA and it is used to compare strings to know
 /// if they are accepted strings or not. The result of this comparation are then
 /// send to an output file
 ///
@@ -64,7 +64,7 @@ int main(int argc, char *argv[]) {
     ErrorMessage(4);
   }
   for (std::string analyze_words : vector_analyze_strings)
-    nfa.WriteResultSearch(writer, analyze_words);
+    nfa.WriteResultSearch(analyze_words, writer);
   writer.close();
   return 0;
 }
@@ -80,9 +80,9 @@ void ErrorMessage(const int kError) {
               << "input.nfa File with behaviour of nfa, that contains:\n"
               << "\tLine 1: Total number of states of NFA.\n"
               << "\tLine 2: Initial state of NFA\n"
-              << "\tBelow is a line for each of the states. Each line will "
-              << "contain the following numbers, separated from each other "
-              << "by blanks:\n "
+              << "\tBelow this, there is a line for each of the states. Each "
+              << "line will contain the following numbers, separated from each"
+              << " other by blanks:\n "
               << "\t\t- State identification number. The automata states "
               << "are represented by natural numbers. For these numbers "
               << "\n\t\twe must start with 0 until the total "

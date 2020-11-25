@@ -41,9 +41,9 @@ std::set<Transition> State::get_transitions(void) const {
 void State::set_state_name(const int kNewStateName) {
   state_name_ = kNewStateName;
 }
-void State::set_state_name(const int kNewStateName, const int kUpperRange, const int kNumLine) {
-  if ((kNewStateName >= kUpperRange) ||
-      (kNewStateName < 0)) {
+void State::set_state_name(const int kNewStateName, const int kUpperRange,
+                           const int kNumLine) {
+  if ((kNewStateName >= kUpperRange) || (kNewStateName < 0)) {
     std::cerr << "The node on line " << kNumLine << " is not in the limits.\n";
     exit(2);
   }

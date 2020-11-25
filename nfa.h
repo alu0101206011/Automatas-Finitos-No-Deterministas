@@ -1,6 +1,10 @@
 /// @class NFA
 ///
 /// @brief Non-Deterministic Finite Automaton class
+/// It houses the attributes referred to an NFA, these being the main
+/// components that are part of it. It has the reading of a NFA file,
+/// which has its specifications. It also has the methods to be developed
+/// for its correct operation.
 ///
 /// @author Anabel Díaz Labrador <alu0101206011@ull.edu.es>
 /// @date 23 Nov 2020
@@ -40,7 +44,7 @@ class NFA {
   /// in NFA
   /// @param os
   /// @param kAnalyzeWord
-  void WriteResultSearch(std::ostream& os, const std::string& kAnalyzeWord);
+  void WriteResultSearch(const std::string &kAnalyzeWord, std::ostream &os);
 
   /// @brief Write the NFA construction
   void Write(std::ostream& os);
@@ -56,7 +60,8 @@ class NFA {
   /// files)
   /// @param kAcceptedState 
   /// @param kNumLine Line in file
-  void accepted_state_into_limits(const int kAcceptedState, const int kNumLine);
+  void accepted_state_into_limits(const int kAcceptedState, 
+                                  const int kNumLine);
 
   /// @brief Recursive method that returns true if the string is an accepted
   /// string
@@ -65,9 +70,9 @@ class NFA {
   /// @return If is an accepted string or not
   bool AnalyzeString(const std::string& kAnalyzeWord, int current_identifier);
 
-  /// @brief Returns state given its ID number
+  /// @brief Method to know the state identifier
   /// @param identifier
-  /// @return
+  /// @return State given its ID number
   State GetState(int identifier) const;
 
   /// @brief Stores all epsilon transitions that have not been yet added to

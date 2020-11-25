@@ -56,7 +56,8 @@ void NFA::set_set_states(const std::set<State> &kNewStates) {
 void NFA::set_initial_state(const int kNewInitialState) {
   initial_state_ = kNewInitialState;
 }
-void NFA::set_initial_state(const std::string &kInitialStateString, const int kUpperRange) {
+void NFA::set_initial_state(const std::string &kInitialStateString,
+                            const int kUpperRange) {
   initial_state_ = stoi(kInitialStateString);
   if ((initial_state_ < 0) || (initial_state_ > kUpperRange)) {
     std::cerr << "The states can't cross the limits\n";
@@ -86,7 +87,8 @@ bool NFA::BelongToAlphabet(const std::string &kAnalyzeWord) {
 
 // Write the result of the analyze string if kAnailyzeWord belong to the
 // alphabet of the NFA
-void NFA::WriteResultSearch(std::ostream &os, const std::string &kAnalyzeWord) {
+void
+NFA::WriteResultSearch(const std::string &kAnalyzeWord, std::ostream &os) {
   if (!BelongToAlphabet(kAnalyzeWord)) {
     os << "No\n";
     return;
@@ -116,7 +118,8 @@ void NFA::Write(std::ostream &os) {
     os << "\nNodos nfa: " << state << "\n";
     for (char alphabet_letters : alphabet_)
       for (int state_int : state.GetNextState(alphabet_letters)) {
-        os << "Sus next states usando simbolo '" << alphabet_letters << "': \n";
+        os << "Sus next states usando simbolo '" << alphabet_letters 
+           << "': \n";
         os << state_int << "\n";
       }
     if (state.NumberOfTransitions() == 0) 
@@ -129,7 +132,7 @@ void NFA::Write(std::ostream &os) {
 std::ifstream &NFA::CreateNFA(std::ifstream &reader_nfa) {
   int total_states_number, state;
   std::string line;
-  std::stringstream ss;
+  std::stringstream buffer;
   std::getline(reader_nfa, line);
   total_states_number = stoi(line);
   if (total_states_number <= 0) {
@@ -150,18 +153,17 @@ std::ifstream &NFA::CreateNFA(std::ifstream &reader_nfa) {
                 << " for more info\n";
       exit(2);
     }
-    ss << line;
-    ss >> state >> accept_state >> size_transitions;
+    buffer << line;
+    buffer >> state >> accept_state >> size_transitions;
     read_state.set_state_name(state, total_states_number, count);
     accepted_state_into_limits(accept_state, count);
     for (unsigned iterator = 0; iterator < size_transitions; iterator++) {
-      if (ss.eof()) {
+      if (buffer.eof()) {
         std::cout << "Transitions do not correspond to the given number "
                   << "[Line " << count << " of de file]\n";
         exit(2);
       }
-      
-      ss >> symbol >> next_name_state;
+      buffer >> symbol >> next_name_state;
       if (total_states_number <= next_name_state || next_name_state < 0) {
         std::cout << "State number out of range [Line " << count
                   << " of de file]\n";
@@ -170,8 +172,8 @@ std::ifstream &NFA::CreateNFA(std::ifstream &reader_nfa) {
       read_state.SetNextState(next_name_state, symbol);
       alphabet_.insert(symbol);
     }
-    ss >> line;
-    if (!ss.eof()) {
+    buffer >> line;
+    if (!buffer.eof()) {
       std::cout << "Transitions do not correspond to the given number "
                 << "[Line " << count << " of de file]\n";
       exit(2);
@@ -179,7 +181,7 @@ std::ifstream &NFA::CreateNFA(std::ifstream &reader_nfa) {
     if (accept_state == 1) 
       accepted_states_.insert(read_state);
     set_states_.insert(read_state);
-    ss.clear();  // to clean buffer before it is used again
+    buffer.clear();  // to clean buffer before it is used again
     read_state.Clear();
     ++count;
   }

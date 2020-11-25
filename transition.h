@@ -1,6 +1,8 @@
 /// @class Transitions
 ///
-/// @brief a class that saves all transitions in a state
+/// @brief It houses the attributes referring to the transitions 
+/// of the states of an NFA, as well as the methods to be developed 
+/// for its correct operation.
 ///
 /// @author Anabel Díaz Labrador <alu0101206011@ull.edu.es>
 /// @date 20 Nov 2020
